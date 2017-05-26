@@ -37,6 +37,7 @@ public class SSLSessionReuse {
 
 		String URL = args[0];
 		boolean useSession = Boolean.parseBoolean(args[1]);
+		boolean useSystemDefault = Boolean.parseBoolean(args[2]);
 		
 		out.print(String.format("Running with %s %s\n", args[0], args[1]));
 		
@@ -46,7 +47,7 @@ public class SSLSessionReuse {
 
 		for (int i = 0; i < 10; i++) {
 			long start = System.currentTimeMillis();
-			readURLDataPrintSize(URL, slc, useSession);
+			readURLDataPrintSize(URL, slc, useSession, useSystemDefault);
 			long end = System.currentTimeMillis();
 			out.println("Took MS : " + (end - start));
 		}
@@ -77,7 +78,7 @@ public class SSLSessionReuse {
 					}
 				};
 
-		SSLContext sslcontext = SSLContext.getInstance("SSL");
+		SSLContext sslcontext = SSLContext.getInstance("TLS");
         out.println("SSLContext SessionTimeout:" + sslcontext.getClientSessionContext().getSessionTimeout());
         out.println("SSLContext SessionTimeout:" + sslcontext.getClientSessionContext().getSessionCacheSize());
 
@@ -93,10 +94,12 @@ public class SSLSessionReuse {
 	 * @throws IOException
 	 * @throws ClientProtocolException
 	 */
-	static void readURLDataPrintSize(String URL, SSLContext slc, boolean useSLC) throws IOException, ClientProtocolException {
+	static void readURLDataPrintSize(String URL, SSLContext slc, boolean useSLC, boolean useDefaults) throws IOException, ClientProtocolException {
 		HttpClient client = null;
 		if(useSLC)
 			client = HttpClients.custom().setSSLContext(slc).build();
+		else if (useDefaults)
+			client = HttpClients.createSystem();
 		else
 			client = HttpClients.custom().build();
 
@@ -123,7 +126,7 @@ public class SSLSessionReuse {
 	}
 
 	private static void usage() {
-		out.println("[URL] Use Context [true|false]");
+		out.println("[URL] Use Context [true|false] System Default context [true|false]");
 
 	}
 }
