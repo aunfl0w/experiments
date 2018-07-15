@@ -2,6 +2,7 @@
 import codecs
 import array
 import sys
+#this is an example of why you should not use xor to hide secrets as described in my blog.
 
 value = sys.argv[1]
 print("guess decoded string of hex encoded string {}".format(value))
