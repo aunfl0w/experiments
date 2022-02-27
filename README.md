@@ -1,5 +1,5 @@
 # Various experiments and learning examples
-Many of these are reffered to in the [blog]: https://aunfl0w.github.io/
+Many of these are reffered to in the [blog](https://aunfl0w.github.io/)
 
 
 
